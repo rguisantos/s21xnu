@@ -1,5 +1,16 @@
 # iOS 16 on sweet (Redmi Note 10 Pro, SM7150) - working notes
 
+## S21 Ultra (p3s) port in this fork (2026-11-26)
+
+Source of truth: rguisantos/S21-baremetal `lab/s21xnu-p3s/` (docs/xnu-s21xnu-p3s.md).
+
+- 91b4dd6 shim, mkadt: `BOARD=t2s|p3s|p3s-window`, `mkadt.py --board=`; p3s panel 1440x3200 S6E3HAD, fb 0xfa000000 size 0x1194000.
+- 4ef3bd1 shim: prints ENTRY/IMAGE/INITRD/FB hand-off facts on the loader screen (probe photo).
+- 60e23f1 xnu: patches 0146 (touch geometry via boot-args touch_panel_w/h), 0147 (letterbox 1125x2436 on 1440x3200), 0148 (`sweetfb_scale=1`, 1440x3118 nearest blit).
+- CI: workflow `xnu`, run 45890705951 on 60e23f1 = success. Log shows "Applying patch" for 0146/0147/0148; SweetHID, SweetFramebuffer and sweet_touch compile. Artifacts: xnu-kernel (61,313,293 B, id 15151244327), xnu-buildtree.
+- Warnings only. New one from 0148: SweetFramebuffer.cpp:194 -Wcast-align on the `(uint32_t *)` blit cast (harmless on arm64; follow-up candidate).
+- Not yet run on hardware. Next: OEM unlock + TWRP on SM-G998B HZC2, flash the probe boot.img, photograph the loader screen, then try this kernel. Wi-Fi BCM4389 still unported.
+
 ## S21+ Wi-Fi Stage 1 patch staged locally (2026-10-31)
 - Created `xnu/patches/0109-sweet-pcie-wifi-link.patch` from the local `sweet_pcie.c` port. It adds the PCIe host driver, registers it in `bsd/conf/files`, and calls it after the built-in HFS registration. Driver stays disabled by default (`sweetpcie=0`).
 - Linux reference bundle exists at `/home/tom/s21/wifi-port.zip`; it contains `pcie-t2s-wifi.c`, S2MPU code, brcmfmac sources/diff, DTS and NVRAM files.
