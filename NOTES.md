@@ -517,3 +517,14 @@ What it took today (in order): 0058 HID services (Apple IOHIDFamily-1915 user cl
      cpu_init, before arm_vm_init.
   5. panic hook at top of panic_trap_to_debugger: va_copy + _doprnt(fmt, &copy, sweet_early_putc, 16).
   Verify with tools/xnu-cc.py (compile+symbols) and patch-order simulation before the single CI run.
+
+## P3S Wi-Fi host packing, 2026-11-26
+
+The HZC2 Android report identifies a SEMCO SWB-E53 ES4.0 BCM4389 C1
+module, firmware 20.80.87.4 (01-3fe70789). On the matching HZC2 vendor
+NVRAM, the previous mkpayload encoder emitted 13955 bytes including its
+length token. After the fix the body is 13952 bytes, exactly 3488 words,
+with a four-byte trailer. All four length residues and word count overflow
+were checked on the host. This changes the optional host packing path.
+The candidate XNU from build 45893910550 still targets BCM4375 in its Wi-Fi
+driver. Device enumeration and BCM4389 operation on p3s remain unverified.

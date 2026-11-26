@@ -161,9 +161,12 @@ def brcmf_nvram(raw):
         raise ValueError('NVRAM file has no key/value entries')
     if not any(x.startswith(b'boardrev=') for x in entries):
         entries.append(b'boardrev=0xff')
-    body = b'\0'.join(entries) + b'\0'
-    body += b'\0' * ((-(len(body) + 1)) & 3)
+    # Each entry has a NUL terminator and one extra NUL ends the list.
+    body = b'\0'.join(entries) + b'\0\0'
+    body += b'\0' * (-len(body) % 4)
     words = len(body) // 4
+    if words > 0xffff:
+        raise ValueError('NVRAM exceeds the 16-bit word count in the length token')
     return body + struct.pack('<I', (((~words) & 0xffff) << 16) | words)
 
 
