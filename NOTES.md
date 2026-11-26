@@ -11,6 +11,7 @@ Source of truth: rguisantos/S21-baremetal `lab/s21xnu-p3s/` (docs/xnu-s21xnu-p3s
 - Warnings only. New one from 0148: SweetFramebuffer.cpp:194 -Wcast-align on the `(uint32_t *)` blit cast (harmless on arm64; follow-up candidate).
 - 5231fe5 xnu: 0148 blit via 4-byte memcpy. Run 45893910550 = success; SweetFramebuffer warnings gone (23386 -> 23370 warning lines). New xnu-kernel 61,313,478 B (id 15153033151).
 - 715d738 xnu: 0149 accepts the p3s BCM4389 endpoint 14e4:4441, reads chipid with sweetwifi>=3, stops before the DMA pool and redwood_bcm4375_run (BCM4375 only). Run 45898493855 = success, 0149 applied, no new sweet_wifi.c warnings; xnu-kernel 61,319,441 B (id 15156115215). Candidate kernel now.
+- 02528b7 xnu: 0150 BCM4389 firmware download through the ARM CA7 + SYSMEM path (Samsung bcmdhd_101_18 dhdpcie_bus_download_state), files bcm4389-{sta.bin,nvram-semco.txt,clm.blob} in /usr/local/etc/wifi, p3s reaches the driver at sweetwifi=4. Run 45901428006 = success, no warnings on the new lines; xnu-kernel id 15156711442. Candidate kernel now.
 - Not yet run on hardware. Next: OEM unlock + TWRP on SM-G998B HZC2, flash the probe boot.img, photograph the loader screen, then try this kernel. Wi-Fi BCM4389 still unported.
 
 ## S21+ Wi-Fi Stage 1 patch staged locally (2026-10-31)
