@@ -9,6 +9,7 @@ Source of truth: rguisantos/S21-baremetal `lab/s21xnu-p3s/` (docs/xnu-s21xnu-p3s
 - 60e23f1 xnu: patches 0146 (touch geometry via boot-args touch_panel_w/h), 0147 (letterbox 1125x2436 on 1440x3200), 0148 (`sweetfb_scale=1`, 1440x3118 nearest blit).
 - CI: workflow `xnu`, run 45890705951 on 60e23f1 = success. Log shows "Applying patch" for 0146/0147/0148; SweetHID, SweetFramebuffer and sweet_touch compile. Artifacts: xnu-kernel (61,313,293 B, id 15151244327), xnu-buildtree.
 - Warnings only. New one from 0148: SweetFramebuffer.cpp:194 -Wcast-align on the `(uint32_t *)` blit cast (harmless on arm64; follow-up candidate).
+- 5231fe5 xnu: 0148 blit via 4-byte memcpy. Run 45893910550 = success; SweetFramebuffer warnings gone (23386 -> 23370 warning lines). New xnu-kernel 61,313,478 B (id 15153033151).
 - Not yet run on hardware. Next: OEM unlock + TWRP on SM-G998B HZC2, flash the probe boot.img, photograph the loader screen, then try this kernel. Wi-Fi BCM4389 still unported.
 
 ## S21+ Wi-Fi Stage 1 patch staged locally (2026-10-31)
