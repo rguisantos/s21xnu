@@ -2,7 +2,7 @@
 """Build the minimal Apple Device Tree that the SWEET xnu needs to boot.
 
 Only what the early boot path actually reads (see NOTES.md); every MMIO
-address comes from the sweet live FDT. Usage:  mkadt.py OUT.adt [--dump] [--qemu] [--highmem]
+address comes from the sweet live FDT. Usage:  mkadt.py OUT.adt [--dump] [--qemu] [--highmem] [--board=t2s|p3s|p3s-window]
 """
 import hashlib, os, struct, sys
 
@@ -30,7 +30,18 @@ GICD, GICD_SIZE = 0x10200000, 0x10000
 GICR, GICR_SIZE = 0x10240000, 0x200000
 FB, FB_SIZE = 0xfa000000, 0x1400000
 SWEET_ECID = 0x5357454554000001  # 'SWEET' + 1, synthetic
-FB_W, FB_H, FB_STRIDE = 1080, 2400, 1080 * 4
+# Panel geometry left by S-Boot: (width, height, stride). --board=p3s selects the
+# S21 Ultra WQHD+ panel (LK's bootloader_fb reservation is 0x1194000 =
+# 1440*3200*4); p3s-window exposes a 1080x2400 window with the 1440-pixel stride
+# so the t2s display/touch geometry in XNU works unchanged. Default is t2s.
+# Keep in step with shim/console.h (BOARD= in shim/build-s21.sh).
+BOARD_FB = {'t2s': (1080, 2400, 1080 * 4), 'p3s': (1440, 3200, 1440 * 4),
+            'p3s-window': (1080, 2400, 1440 * 4)}
+BOARD = next((a.split('=', 1)[1] for a in sys.argv if a.startswith('--board=')), 't2s')
+if BOARD not in BOARD_FB:
+    raise SystemExit(f'unknown --board={BOARD} (expected one of {sorted(BOARD_FB)})')
+FB_W, FB_H, FB_STRIDE = BOARD_FB[BOARD]
+assert FB_STRIDE * FB_H <= FB_SIZE, 'framebuffer geometry exceeds FB_SIZE'
 # Internal UFS host (ufshc@1d84000 "ufs_mem"); QEMU virt has none
 UFS, UFS_SIZE = 0x13100000, 0x2000
 TIMEBASE = 26000000
