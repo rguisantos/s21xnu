@@ -15,6 +15,7 @@ Source of truth: rguisantos/S21-baremetal `lab/s21xnu-p3s/` (docs/xnu-s21xnu-p3s
 - b5b1377 xnu: 0150 checks the CA7 RAM against BAR2 after the image's SMAR size (chip() only logs it). Run 45903906003 = success; warnings only on upstream lines; xnu-kernel id 15157182599. Candidate kernel now. Wi-Fi files: S21-baremetal lab/s21xnu-p3s/wifi/prepare_wifi_files.py.
 - fe8e2ed xnu: 0150 puts an over-large BAR2 (8 MB) first in the 16 MB PCIe window, BAR0 after it (found by S21-baremetal sim_wifi_0150.py; BCM4375 layout unchanged). Run 45913838407 = success; xnu-kernel id 15161587559. Candidate kernel now.
 - 6a02361 xnu: 0151 IOHIDEvent digitizer constructors (Tilt/Polar/Quality) pass z to digitizerEvent() and Tilt uses yTilt (before: pressure shifted into z, xTilt on both axes). Run 46022394450 = success; IOHIDEvent.cpp warnings 329 -> 326, none on the changed lines; xnu-kernel id 15210603694. Candidate kernel now.
+- 2300193 ci(xnu): SHA256SUMS over kernel files only, printed in the log. Run 46028220411 = success; kernel.development.sweet sha256 e0c75c109c90288504606cb8062da5c2397ec61024bd91620fe60475a57320d4 (17,505,040 B), includes 0146-0151; xnu-kernel id 15213548510. Candidate kernel now (S21-baremetal docs/references/s21xnu-fork-kernels.json).
 - Not yet run on hardware. Next: OEM unlock + TWRP on SM-G998B HZC2, flash the probe boot.img, photograph the loader screen, then try this kernel. Wi-Fi BCM4389 still unported.
 
 ## S21+ Wi-Fi Stage 1 patch staged locally (2026-10-31)
